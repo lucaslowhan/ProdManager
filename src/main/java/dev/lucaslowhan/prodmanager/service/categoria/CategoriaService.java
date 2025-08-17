@@ -59,4 +59,9 @@ public class CategoriaService {
         categoria.desativar();
         repository.save(categoria);
     }
+
+    public Categoria buscarPorId(Long id){
+        return repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Categoria não encontrada!"));
+    }
 }

@@ -1,6 +1,8 @@
 package dev.lucaslowhan.prodmanager.domain.produto;
 
 import dev.lucaslowhan.prodmanager.domain.categoria.Categoria;
+import dev.lucaslowhan.prodmanager.domain.categoria.dto.CategoriaRequestDTO;
+import dev.lucaslowhan.prodmanager.domain.produto.dto.ProdutoRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -44,5 +46,17 @@ public class Produto {
 
     private LocalDateTime dataCriacao;
     private Boolean ativo;
+
+    public Produto(ProdutoRequestDTO produtoRequestDTO, Categoria categoria){
+        this.ativo = true;
+        this.nome = produtoRequestDTO.nome();
+        this.descricao = produtoRequestDTO.descricao();
+        this.preco = produtoRequestDTO.preco();
+        this.quantidadeEstoque = produtoRequestDTO.quantidadeEstoque();
+        this.estoqueMinimo = produtoRequestDTO.estoqueMinimo();
+        this.sku = produtoRequestDTO.sku();
+        this.categoria = categoria;
+        this.dataCriacao = LocalDateTime.now();
+    }
 
 }
