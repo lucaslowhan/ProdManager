@@ -28,7 +28,6 @@ public record ProdutoRequestDTO(
         String sku,
 
         @NotNull(message = "A categoria é obrigatória!")
-        Long categoriaId,
-        Boolean ativo
+        Long categoriaId
 ) {
 }

@@ -3,7 +3,9 @@ package dev.lucaslowhan.prodmanager.domain.produto;
 import dev.lucaslowhan.prodmanager.domain.categoria.Categoria;
 import dev.lucaslowhan.prodmanager.domain.categoria.dto.CategoriaRequestDTO;
 import dev.lucaslowhan.prodmanager.domain.produto.dto.ProdutoRequestDTO;
+import dev.lucaslowhan.prodmanager.domain.produto.dto.ProdutoUpdateDTO;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -59,4 +61,26 @@ public class Produto {
         this.dataCriacao = LocalDateTime.now();
     }
 
+    public void atualizar(ProdutoUpdateDTO dto) {
+        if(dto.nome()!=null && dto.nome().isBlank()){
+            this.nome = dto.nome();
+        }
+        if(dto.descricao()!=null && dto.descricao().isBlank()){
+            this.descricao = dto.descricao();
+        }
+        if(dto.preco()!=null && dto.preco().compareTo(BigDecimal.ZERO)>=0){
+            this.preco = dto.preco();
+        }
+        if(dto.quantidadeEstoque()!=null && dto.quantidadeEstoque()>=0){
+            this.quantidadeEstoque = dto.quantidadeEstoque();
+        }
+        if(dto.estoqueMinimo()!=null && dto.estoqueMinimo()>=0){
+            this.estoqueMinimo = dto.estoqueMinimo();
+        }
+
+    }
+
+    public void desativar() {
+        this.ativo = false;
+    }
 }
