@@ -1,6 +1,7 @@
 package dev.lucaslowhan.prodmanager.domain.categoria;
 
-import dev.lucaslowhan.prodmanager.domain.categoria.dto.CadastrarCategoriaDTO;
+import dev.lucaslowhan.prodmanager.domain.categoria.dto.CategoriaRequestDTO;
+import dev.lucaslowhan.prodmanager.domain.categoria.dto.CategoriaUpdateDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,12 +25,25 @@ public class Categoria {
     private LocalDateTime dataCriacao;
     private Boolean ativa;
 
-    public Categoria(CadastrarCategoriaDTO dto){
+    public Categoria(CategoriaRequestDTO dto){
         this.ativa = true;
         this.nome = dto.nome();
         if(dto.descricao()!=null) {
             this.descricao = dto.descricao();
         }
         this.dataCriacao = LocalDateTime.now();
+    }
+
+    public void atualizar(CategoriaUpdateDTO dto){
+        if(dto.nome() != null  && !dto.nome().isBlank()){
+            this.nome = dto.nome();
+        }
+        if(dto.descricao() != null && !dto.descricao().isBlank()){
+            this.descricao = dto.descricao();
+        }
+    }
+
+    public void desativar() {
+        this.ativa = false;
     }
 }
