@@ -11,7 +11,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity(name = "Produto")
-@Table(name = "produtos")
+@Table(name = "produtos", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "sku")
+})
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,14 +23,23 @@ public class Produto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String nome;
     private String descricao;
+
+    @Column(nullable = false)
     private BigDecimal preco;
+
+    @Column(nullable = false)
     private Integer quantidadeEstoque;
+    @Column(nullable = false)
     private Integer estoqueMinimo;
+
+    @Column(nullable = false, unique = true)
     private String sku;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoria_id",nullable = false)
     private Categoria categoria;
 
     private LocalDateTime dataCriacao;
