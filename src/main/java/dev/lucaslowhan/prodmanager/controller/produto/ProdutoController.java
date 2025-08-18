@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/produto")
 public class ProdutoController {
@@ -54,6 +56,29 @@ public class ProdutoController {
     public ResponseEntity<Void> excluir(@PathVariable Long id){
         produtoService.excluirProduto(id);
         return ResponseEntity.noContent().build();
+    }
+
+    //PAGINAÇAO E FILTROS
+
+    //Filtro produtos por categoria
+    @GetMapping("/categoria/{categoriaId}")
+    public ResponseEntity<Page<ProdutoResponseDTO>> listarPorCategoria(@PathVariable Long categoriaId, Pageable pageable){
+        Page<ProdutoResponseDTO> produtosPorCategoria = produtoService.listarPorCategoria(categoriaId,pageable);
+        return ResponseEntity.ok(produtosPorCategoria);
+    }
+
+    //Filtro produtos por nome
+    @GetMapping("/nome/{nome}")
+    public ResponseEntity<Page<ProdutoResponseDTO>> listarPorNome(@PathVariable String nome, Pageable pageable){
+        Page<ProdutoResponseDTO> produtosPorNome = produtoService.listarPorNome(nome,pageable);
+        return ResponseEntity.ok(produtosPorNome);
+    }
+
+    //Filtro estoque abaixo do minimo
+    @GetMapping("/estoque-minimo")
+    public ResponseEntity<List<ProdutoResponseDTO>> listarAbaixoDoMinimo(){
+        var produtos = produtoService.listarAbaixoDoMinimo();
+        return ResponseEntity.ok(produtos);
     }
 
 }

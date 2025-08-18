@@ -17,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ProdutoService {
     @Autowired
@@ -66,5 +68,22 @@ public class ProdutoService {
 
         produto.desativar();
         produtoRepository.save(produto);
+    }
+
+    public Page<ProdutoResponseDTO> listarPorCategoria(Long categoriaId, Pageable pageable) {
+        return produtoRepository.findByCategoriaId(categoriaId,pageable)
+                .map(ProdutoResponseDTO::new);
+    }
+
+    public Page<ProdutoResponseDTO> listarPorNome(String nome, Pageable pageable) {
+        return produtoRepository.findByNomeContainingIgnoreCase(nome, pageable)
+                .map(ProdutoResponseDTO::new);
+    }
+
+    public List<ProdutoResponseDTO> listarAbaixoDoMinimo() {
+        return produtoRepository.findProdutosAbaixoDoEstoqueMinimo()
+                .stream()
+                .map(ProdutoResponseDTO::new)
+                .toList();
     }
 }
