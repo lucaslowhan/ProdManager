@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 public record MovimentacaoRequestDTO(
         @NotNull(message = "Id do produto obrigatorio")
         Long produtoId,
-        @NotBlank(message = "Tipo de movimentacao obrigatorio")
+        @NotNull(message = "Tipo de movimentacao obrigatorio")
         TipoMovimentacao tipoMovimentacao,
         @NotNull(message = "Quantidade obrigatorio")
         Integer quantidade,

@@ -7,7 +7,10 @@ import dev.lucaslowhan.prodmanager.domain.movimentacao.dto.MovimentacaoResponseD
 import dev.lucaslowhan.prodmanager.domain.produto.Produto;
 import dev.lucaslowhan.prodmanager.repository.movimentacao.MovimentacaoRepository;
 import dev.lucaslowhan.prodmanager.repository.produto.ProdutoRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,5 +56,20 @@ public class MovimentacaoService {
 
         return new MovimentacaoResponseDTO(movimentacao);
 
+    }
+
+    public Page<MovimentacaoResponseDTO> listar(Pageable pageable) {
+        return movimentacaoRepository.findAll(pageable)
+                .map(MovimentacaoResponseDTO::new);
+    }
+
+    public MovimentacaoResponseDTO buscarPorId(Long id) {
+        var movimentacao = movimentacaoRepository.getReferenceById(id);
+        return new MovimentacaoResponseDTO(movimentacao);
+    }
+
+    public Page<MovimentacaoResponseDTO> listarPorProduto(Long produtoId, Pageable pageable) {
+        return movimentacaoRepository.findByProdutoId(produtoId,pageable)
+                .map(MovimentacaoResponseDTO::new);
     }
 }
