@@ -3,6 +3,7 @@ package dev.lucaslowhan.prodmanager.repository.produto;
 import aj.org.objectweb.asm.commons.Remapper;
 import dev.lucaslowhan.prodmanager.domain.produto.Produto;
 import dev.lucaslowhan.prodmanager.domain.produto.dto.ProdutoResponseDTO;
+import dev.lucaslowhan.prodmanager.domain.relatorio.dto.RelatorioSaldoTotalEstoqueDTO;
 import jakarta.validation.constraints.NotBlank;
 import org.springframework.beans.PropertyValues;
 import org.springframework.data.domain.Page;
@@ -26,4 +27,14 @@ public interface ProdutoRepository extends JpaRepository<Produto,Long> {
     @Modifying
     @Query("UPDATE Produto p SET p.quantidadeEstoque = :estoqueAtualizado WHERE p.id = :id")
     void atualizarEstoque(Long id, Integer estoqueAtualizado);
+
+    @Query("""
+        SELECT new dev.lucaslowhan.prodmanager.domain.relatorio.dto.RelatorioSaldoTotalEstoqueDTO(
+            p.id,
+            p.nome,
+            p.quantidadeEstoque
+        )
+        FROM Produto p
+""")
+    List<RelatorioSaldoTotalEstoqueDTO> saldoTotalEstoque();
 }

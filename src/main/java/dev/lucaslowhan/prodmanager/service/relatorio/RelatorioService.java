@@ -1,27 +1,21 @@
 package dev.lucaslowhan.prodmanager.service.relatorio;
 
 import dev.lucaslowhan.prodmanager.domain.relatorio.dto.RelatorioProdutoMovimentadoDTO;
+import dev.lucaslowhan.prodmanager.domain.relatorio.dto.RelatorioSaldoTotalEstoqueDTO;
 import dev.lucaslowhan.prodmanager.repository.movimentacao.MovimentacaoRepository;
-import dev.lucaslowhan.prodmanager.service.movimentacao.MovimentacaoService;
+import dev.lucaslowhan.prodmanager.repository.produto.ProdutoRepository;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.openpdf.text.Document;
-import org.openpdf.text.DocumentException;
 import org.openpdf.text.Paragraph;
-import org.openpdf.text.pdf.PdfPTable;
-import org.openpdf.text.pdf.PdfTable;
 import org.openpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -29,6 +23,9 @@ import java.util.List;
 public class RelatorioService {
     @Autowired
     private MovimentacaoRepository movimentacaoRepository;
+
+    @Autowired
+    private ProdutoRepository produtoRepository;
 
     public List<RelatorioProdutoMovimentadoDTO> produtosMaisMovimentados(){
         return movimentacaoRepository.listarProdutosMaisMovimentados();
@@ -38,8 +35,8 @@ public class RelatorioService {
         List<RelatorioProdutoMovimentadoDTO> dados = movimentacaoRepository.listarProdutosMaisMovimentados();
 
         return switch (tipo.toLowerCase()){
-            case "excel" -> gerarRelatorioExcel(dados);
-            case "pdf" -> gerarRelatorioPDF(dados);
+            case "excel" -> gerarRelatorioProdutoMaisMovimentadoExcel(dados);
+            case "pdf" -> gerarRelatorioProdutoMaisMovimentadoPDF(dados);
             default -> throw new IllegalArgumentException("Tipo de relatório inválido: " + tipo);
         };
     }
@@ -47,7 +44,7 @@ public class RelatorioService {
 
 
     //Gerar Relatorio PDF
-    public ResponseEntity<byte[]> gerarRelatorioPDF(List<RelatorioProdutoMovimentadoDTO> dados) {
+    public ResponseEntity<byte[]> gerarRelatorioProdutoMaisMovimentadoPDF(List<RelatorioProdutoMovimentadoDTO> dados) {
 
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -81,7 +78,7 @@ public class RelatorioService {
     }
 
     //gerarRelatorioExcel
-    public ResponseEntity<byte[]> gerarRelatorioExcel(List<RelatorioProdutoMovimentadoDTO> dados){
+    public ResponseEntity<byte[]> gerarRelatorioProdutoMaisMovimentadoExcel(List<RelatorioProdutoMovimentadoDTO> dados){
         try(Workbook workbook = new XSSFWorkbook()){
             Sheet sheet = workbook.createSheet("Produtos Movimentados");
             Row headerRow = sheet.createRow(0);
@@ -121,5 +118,9 @@ public class RelatorioService {
 
 
 
+    }
+
+    public List<RelatorioSaldoTotalEstoqueDTO> saldoTotalEstoque() {
+        return produtoRepository.saldoTotalEstoque();
     }
 }
