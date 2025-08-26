@@ -6,8 +6,6 @@ import dev.lucaslowhan.prodmanager.domain.categoria.dto.CategoriaResponseDTO;
 import dev.lucaslowhan.prodmanager.domain.categoria.dto.CategoriaUpdateDTO;
 import dev.lucaslowhan.prodmanager.repository.categoria.CategoriaRepository;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.constraints.NotNull;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

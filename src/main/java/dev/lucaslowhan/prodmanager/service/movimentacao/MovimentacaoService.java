@@ -5,6 +5,9 @@ import dev.lucaslowhan.prodmanager.domain.movimentacao.TipoMovimentacao;
 import dev.lucaslowhan.prodmanager.domain.movimentacao.dto.MovimentacaoRequestDTO;
 import dev.lucaslowhan.prodmanager.domain.movimentacao.dto.MovimentacaoResponseDTO;
 import dev.lucaslowhan.prodmanager.domain.produto.Produto;
+import dev.lucaslowhan.prodmanager.infra.exception.BusinessException;
+import dev.lucaslowhan.prodmanager.infra.exception.ConflictException;
+import dev.lucaslowhan.prodmanager.infra.exception.ResourceNotFoundException;
 import dev.lucaslowhan.prodmanager.repository.movimentacao.MovimentacaoRepository;
 import dev.lucaslowhan.prodmanager.repository.produto.ProdutoRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -25,7 +28,7 @@ public class MovimentacaoService {
     @Transactional
     public MovimentacaoResponseDTO registrarMovimentacao(MovimentacaoRequestDTO movimentacaoRequestDTO){
         Produto produto = produtoRepository.findById(movimentacaoRequestDTO.produtoId())
-                .orElseThrow(()-> new RuntimeException("Produto não encontrado"));
+                .orElseThrow(()-> new ResourceNotFoundException("Produto não encontrado"));
 
         Integer estoqueAnterior = produto.getQuantidadeEstoque();
 
@@ -35,14 +38,14 @@ public class MovimentacaoService {
                 estoqueAtualizado = estoqueAnterior + movimentacaoRequestDTO.quantidade();
             }else{
                 if(estoqueAnterior < movimentacaoRequestDTO.quantidade()){
-                    throw new RuntimeException("Estoque insuficiente para saída");
+                    throw new BusinessException("Estoque insuficiente para saída");
                 }
                 estoqueAtualizado = estoqueAnterior - movimentacaoRequestDTO.quantidade();
             }
 
             produtoRepository.atualizarEstoque(produto.getId(), estoqueAtualizado);
         }else {
-            throw new RuntimeException("Quantidade da movimentação não pode ser negativa");
+            throw new BusinessException("Quantidade da movimentação não pode ser negativa");
         }
 
         Movimentacao movimentacao = new Movimentacao(
