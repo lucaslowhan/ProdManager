@@ -47,45 +47,61 @@ O projeto é ideal para aprendizado e aplicações de controle de estoque pequen
 └── dev/lucaslowhan/prodmanager
     ├── controller
     │   ├── categoria
-    │   │   └── CategoriaController.java
+    │   │   └── CategoriaController.class
     │   ├── movimentacao
-    │   │   └── MovimentacaoController.java
+    │   │   └── MovimentacaoController.class
     │   ├── produto
-    │   │   └── ProdutoController.java
+    │   │    └── ProdutoController.class
+    │   └── relatorio
+    │       └── RelatorioController.class
     ├── domain
     │   ├── categoria
-    │   │   └── dto
-    │   │   │   ├── CategoriaRequestDTO.java
-    │   │   │   ├── CategoriaResponseDTO.java
-    │   │   │   └── CategoriaUpdateDTO.java
-    │   │   └── Categoria.java
+    │   │   ├── dto
+    │   │   │   ├── CategoriaRequestDTO.class
+    │   │   │   ├── CategoriaResponseDTO.class
+    │   │   │   └── CategoriaUpdateDTO.class
+    │   │   └── Categoria.class
     │   ├── movimentacao
-    │   │   └── dto
-    │   │   │   ├── MovimentacaoRequestDTO.java
-    │   │   │   └── MovimentacaoResponseDTO.java
-    │   │   ├── Movimentacao.java
-    │   │   └── TipoMovimentacao.java
+    │   │   ├── dto
+    │   │   │   ├── MovimentacaoRequestDTO.class
+    │   │   │   └── MovimentacaoResponseDTO.class
+    │   │   ├── Movimentacao.class
+    │   │   └── TipoMovimentacao.class
     │   ├── produto
-    │   │   └── dto
-    │   │   │   ├── ProdutoRequestDTO.java
-    │   │   │   ├── ProdutoResponseDTO.java
-    │   │   │   └── ProdutoUpdateDTO.java
-    │   │   └── Produto.java
+    │   │   ├── dto
+    │   │   │   ├── ProdutoRequestDTO.class
+    │   │   │   ├── ProdutoResponseDTO.class
+    │   │   │   └── ProdutoUpdateDTO.class
+    │   │   └── Produto.class
+    │   └── relatorio
+    │       └── dto
+    │           ├── RelatorioProdutoMovimentadoDTO.class
+    │           └── RelatorioSaldoTotalEstoqueDTO.class
+    ├── infra 
+    │   └── exception
+            ├── BusinessException.class
+            ├── ConflictException.class
+            ├── ErrorException.class
+            ├── GlobalException.class
+            ├── RecourceNotFoundException.class
+            ├── ValidationException.class
     ├── repository
     │   ├── categoria
-    │   │   └── CategoriaRepository.java
+    │   │   └── CategoriaRepository.class
     │   ├── movimentacao
-    │   │   └── MovimentacaoRepository.java
-    │   ├── produto
-    │   │   └── ProdutoRepository.java
+    │   │   └── MovimentacaoRepository.class
+    │   └── produto
+    │       └── ProdutoRepository.class
     ├── service
     │   ├── categoria
-    │   │   └── CategoriaService.java
+    │   │   └── CategoriaService.class
     │   ├── movimentacao
-    │   │   └── MovimentacaoService.java
+    │   │   └── MovimentacaoService.class
     │   ├── produto
-    │   │   └── ProdutoService.java
-    └── ProdManagerApplication.java
+    │   │   └── ProdutoService.class
+    │   └── relatorio
+    │       └── RelatorioService.class
+    └── ProdManagerApplication.class
 ```
 
 ---
