@@ -1,5 +1,8 @@
 package dev.lucaslowhan.prodmanager.service.produto;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import dev.lucaslowhan.prodmanager.domain.audit.TipoOperacao;
 import dev.lucaslowhan.prodmanager.domain.produto.Produto;
 import dev.lucaslowhan.prodmanager.domain.produto.dto.ProdutoRequestDTO;
 import dev.lucaslowhan.prodmanager.domain.produto.dto.ProdutoResponseDTO;
@@ -8,6 +11,7 @@ import dev.lucaslowhan.prodmanager.infra.exception.BusinessException;
 import dev.lucaslowhan.prodmanager.infra.exception.ConflictException;
 import dev.lucaslowhan.prodmanager.infra.exception.ResourceNotFoundException;
 import dev.lucaslowhan.prodmanager.repository.produto.ProdutoRepository;
+import dev.lucaslowhan.prodmanager.service.audit.AuditService;
 import dev.lucaslowhan.prodmanager.service.categoria.CategoriaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,12 @@ public class ProdutoService {
 
     @Autowired
     private CategoriaService categoriaService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    private AuditService auditService;
 
     public ProdutoResponseDTO criarProduto(ProdutoRequestDTO dto){
         if(produtoRepository.existsBySku(dto.sku())){
@@ -62,8 +72,38 @@ public class ProdutoService {
         var produto = produtoRepository.findById(id)
                 .orElseThrow(()->new ResourceNotFoundException("Produto com ID " + id + " não encontrado"));
 
-        produto.desativar();
-        produtoRepository.save(produto);
+        try {
+            String before = objectMapper.writeValueAsString(produto);
+            produto.desativar();
+            produtoRepository.save(produto);
+
+            String after = objectMapper.writeValueAsString(produto);
+
+            auditService.log(TipoOperacao.EXCLUIR_PRODUTO,
+                    "Produto",
+                    produto.getId(),
+                    before,
+                    after,
+                    true,
+                    null);
+        }catch (Exception ex){
+            auditService.log(
+                    TipoOperacao.EXCLUIR_PRODUTO,
+                    "Produto",
+                    produto.getId(),
+                    produto,
+                    null,
+                    false,
+                    ex.getMessage()
+            );
+            try {
+                throw ex;
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+
     }
 
     public Page<ProdutoResponseDTO> listarPorCategoria(Long categoriaId, Pageable pageable) {
