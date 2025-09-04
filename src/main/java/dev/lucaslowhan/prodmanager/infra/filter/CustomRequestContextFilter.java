@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class RequestContextFilter implements Filter {
+public class CustomRequestContextFilter implements Filter {
 
     public static final String MDC_REQUEST_ID = "requestId";
     public static final String MDC_USER = "user";
