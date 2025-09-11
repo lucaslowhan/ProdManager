@@ -4,6 +4,7 @@ import dev.lucaslowhan.prodmanager.domain.categoria.dto.CategoriaRequestDTO;
 import dev.lucaslowhan.prodmanager.domain.categoria.dto.CategoriaResponseDTO;
 import dev.lucaslowhan.prodmanager.domain.categoria.dto.CategoriaUpdateDTO;
 import dev.lucaslowhan.prodmanager.service.categoria.CategoriaService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.persistence.Entity;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/categoria")
+@SecurityRequirement(name="bearer-key")
 public class CategoriaController {
 
     @Autowired

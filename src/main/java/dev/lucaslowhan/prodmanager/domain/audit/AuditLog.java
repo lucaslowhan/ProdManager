@@ -17,9 +17,10 @@ public class AuditLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_operacao", nullable = false)
     private TipoOperacao tipoOperacao;
+
 
     private String entityName;
     private Long EntityId;
